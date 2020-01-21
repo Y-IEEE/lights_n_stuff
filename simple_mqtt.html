@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Test Light Grid</title>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.2/mqttws31.min.js" type="text/javascript"></script>
+
+		<script>
+			function startConnect() {
+				// Generate a random client ID
+				clientID = "clientID-" + parseInt(Math.random() * 100);
+
+				// Fetch the hostname/IP address and port number from the form
+				host = "test.mosquitto.org";
+				port = "8080";
+
+				// Print output for the user in the messages div
+				document.getElementById("messages").innerHTML += '<span>Connecting to: ' + host + ' on port: ' + port + '</span><br/>';
+				document.getElementById("messages").innerHTML += '<span>Using the following client value: ' + clientID + '</span><br/>';
+
+				// Initialize new Paho client connection
+				client = new Paho.MQTT.Client(host, Number(port), clientID);
+
+				// Set callback handlers
+				client.onConnectionLost = onConnectionLost;
+				client.onMessageArrived = onMessageArrived;
+
+				// Connect the client, if successful, call onConnect function
+				client.connect({ 
+					onSuccess: onConnect,
+				});
+			}
+
+			// Called when the client connects
+			function onConnect() {
+	    			// Fetch the MQTT topic from the form
+	    			topic = "#";
+
+	        		// Print output for the user in the messages div
+	        		document.getElementById("messages").innerHTML += '<span>Subscribing to: ' + topic + '</span><br/>';
+
+		    		// Subscribe to the requested topic
+		    		client.subscribe(topic);
+			}
+
+			// Called when the client loses its connection
+			function onConnectionLost(responseObject) {
+	    			document.getElementById("messages").innerHTML += '<span>ERROR: Connection lost</span><br/>';
+	 		      	if (responseObject.errorCode !== 0) {
+			        	document.getElementById("messages").innerHTML += '<span>ERROR: ' + + responseObject.errorMessage + '</span><br/>';
+				}
+			}
+
+			// Called when a message arrives
+			function onMessageArrived(message) {
+	   			 console.log("onMessageArrived: " + message.payloadString);
+	       			 document.getElementById("messages").innerHTML += '<span>Topic: ' + message.destinationName + '  | ' + message.payloadString + '</span><br/>';
+			}
+
+			// Called when the disconnection button is pressed
+			function startDisconnect() {
+	    			client.disconnect();
+	        		document.getElementById("messages").innerHTML += '<span>Disconnected</span><br/>';
+			}
+
+			var lights = [0,0,0,0,0,0,0,0,0];
+			function clicked(id) {
+				var finalMessage = "";
+				startConnect();
+				switch(lights[id]) {
+					case 0:
+						lights[id] = 1;
+						//blue
+						document.getElementById("button-"+id).style.background = "#4BAED8";
+						break;
+					case 1:
+						lights[id] = 2;
+						//red
+						document.getElementById("button-"+id).style.background = "#D8554B";
+						break;
+					case 2:
+						lights[id] = 3;
+						//green
+						document.getElementById("button-"+id).style.background = "#64B743";
+						break;
+					default:
+						lights[id] = 0;
+						//white
+						document.getElementById("button-"+id).style.background = "white";
+						break;
+				}
+				for(var i = 0; i < 9; i++) {
+					console.log(i);
+					switch(lights[i]) {
+						case 0:
+							finalMessage = finalMessage.concat("(" + "00" + i + "," + "000/000/000" + ")");
+							break;
+						case 1:
+							finalMessage = finalMessage.concat("(" + "00" + i + "," + "000/000/255" + ")");
+							break;
+						case 2:
+							finalMessage = finalMessage.concat("(" + "00" + i + "," + "255/000/000" + ")");
+							break;
+						default:
+							finalMessage = finalMessage.concat("(" + "00" + i + "," + "000/255/000" + ")");
+					}
+				}	
+				console.log(finalMessage);
+			}
+
+		</script>
+		<style>
+			button {
+				height: 9em;
+				width: 9em;
+				border-radius:5px;
+				margin: 1em;
+				box-shadow: 0px 0px 5px 4px rgba(0,0,0,0.1);
+				border-width: 0px;
+			}
+
+		</style>
+
+	<body>
+		<div class="card bg-light mb-3" style="max-width: 38em; margin: auto; margin-top: 2em;">
+			<div class="card-header h1">3x3 Grid</div>
+			<div class="card-body" style="text-align: center;">
+				<button id="button-0" onclick="clicked('0')">0</button>
+				<button id="button-1" onclick="clicked('1')">1</button>
+				<button id="button-2" onclick="clicked('2')">2</button>
+				<br>
+				<button id="button-3" onclick="clicked('3')">3</button>
+				<button id="button-4" onclick="clicked('4')">4</button>
+				<button id="button-5" onclick="clicked('5')">5</button>
+				<br>
+				<button id="button-6" onclick="clicked('6')">6</button>
+				<button id="button-7" onclick="clicked('7')">7</button>
+				<button id="button-8" onclick="clicked('8')">8</button>
+				<br>
+			</div>
+		</div>
+		<div class="card bg-light mb-3" style="max-width: 38em; margin: auto; margin-top: 2em;">
+			<div class="card-header">MQTT Diagnositcs</div>
+			<div class="card-body">
+				<div id="messages">
+				</div>	
+			</div>
+		</div>
+	</body>
+</html>
