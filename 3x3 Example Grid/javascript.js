@@ -5,11 +5,11 @@ var lights = [0,0,0,0,0,0,0,0,0];
 
 // MQTT INFO
 var connected = false;
-var host = "farmer.cloudmqtt.com";
+var host = ".cloudmqtt.com";
 var port = 34479;
 var client_id = "lightboard_" + parseInt(Math.random() * 100, 10);
-var usr = "xoemllsy";
-var pass = "hdgazSRFNst3";
+var usr = "";
+var pass = "";
 
 // MISC INFO
 var red = "#D8554B";
