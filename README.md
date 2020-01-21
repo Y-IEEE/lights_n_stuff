@@ -2,17 +2,11 @@
 Lets putting lights on a building
 
 <br/>
-<br/>
-<br/>
-
 
 ## 3x3 Grid Example:
 A simple implementation of Paho MQTT using cloud MQTT as a broker, more information in folder
 
 <br/>
-<br/>
-<br/>
-
 
 ## Potential Buildings:
 
