@@ -1,5 +1,5 @@
 # YIEEE LIGHT BUILDING 
-Lets putting lights on a building
+Lets putting lights on a building.
 
 <br/>
 
