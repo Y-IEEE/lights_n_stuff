@@ -1,38 +1,17 @@
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 
-/*
-* DEVICE MAC ADDRESS: 
-*/
-
-/*
-* IDENTIFICATION INFORMATION:
-*/
-const int identificationNum = 1;
-const char* clientID = identificationNum.ToString().PadLeft(3, '0');
-const char* clientName = deviceID + "ESP8266Client";
-
-/*
-* WIFI INFORMATION:
-*/
-const char* ssid = "yale wireless";
+const char* deviceID = "001";
+const int R = 15;
+const int G = 12;
+const int B = 16;
+ 
+const char* ssid = "yale wireless";             //
 const char* password =  "";
-
-/*
-* MQTT INFORMATION:
-*/
 const char* mqttServer = "farmer.cloudmqtt.com";    //35.239.98.209 for our python server    farmer.cloudmqtt.com for cloud mqtt
 const int mqttPort = 14479;  
 const char* mqttUser = "xoemllsy";     // yale for ours.    xoemllsy for cloud mqtt
 const char* mqttPassword = "hdgazSRFNst3";    //lightsnstuff for ours,    hdgazSRFNst3 for cloudmqtt
-
-/*
-* COLOR PINS:
-*/
-const int R_pin = 15;
-const int G_pin = 12;
-const int B_pin = 16;
-
  
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -41,56 +20,40 @@ void setup() {
  
   Serial.begin(115200);
  
-  // Loop until wifi connection succeeds
   WiFi.begin(ssid, password);
+ 
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
-    Serial.println("Connecting to WiFi...");
+    Serial.println("Connecting to WiFi..");
   }
   Serial.println("Connected to the WiFi network");
  
-  // Set up connection to MQTT broker
   client.setServer(mqttServer, mqttPort);
-
-  // Function to callback when new message is received
   client.setCallback(callback);
  
   while (!client.connected()) {
-    Serial.println("Connecting to MQTT Broker" + mqttServer);
+    Serial.println("Connecting to MQTT...");
  
-    // Connect to the MQTT broker with MQTT Information
-    if (client.connect(clientName, mqttUser, mqttPassword)) {
-      // Connection Succeed, callback function is called automatically when new message is detected
-      Serial.println("Connected to MQTT Broker: " + mqttServer);
-      Serial.println("Listening to Topic: " + clientID);
+    if (client.connect("ESP8266Client", mqttUser, mqttPassword )) {
+ 
+      Serial.println("connected");  
  
     } else {
-      // MQTT connection failed
-      Serial.print("Failed to connect with state: ");
+ 
+      Serial.print("failed with state ");
       Serial.print(client.state());
       delay(2000);
  
     }
   }
 
-  // Publish that we've connected to the MQTT Broker
-  client.publish(clientID, "On & Connected");
-
-  // Subscribe to devices topic
-  client.subscribe(clientID);
-
-  // Test the lights
+  client.publish(deviceID, "On & Connected");
+  client.subscribe("To Chips");
   testLights();
-
-  // Print MAC Addresses
-  Serial.println("MAC Address: " + WiFi.macAddress());
   Serial.println(WiFi.macAddress());
  
 }
-
-/*
-* Function called when new mqtt message is published to subscribed topic
-*/
+ 
 void callback(char* topic, byte* data, unsigned int length) {
  
   Serial.print("Message arrived in topic: ");
@@ -101,7 +64,7 @@ void callback(char* topic, byte* data, unsigned int length) {
     Serial.print((char)data[i]);
   }
 
-  // Find the data that belonds to my ID
+  //find data
     bool getID = 0;
     bool getCommand = 0;
     String gotID = "";
@@ -111,7 +74,6 @@ void callback(char* topic, byte* data, unsigned int length) {
       if ((char)data[i] ==')' && getCommand){
         getCommand = 0;
         //Serial.println(command);
-        // change the lights based on the received color
         changeColors(command);
         break;}
       
@@ -137,59 +99,58 @@ void callback(char* topic, byte* data, unsigned int length) {
  
   Serial.println();
   Serial.println("-----------------------");
+ 
 }
  
-/*
-* Processes and publishes data and refreshes the connection
-*/ 
 void loop() {
   client.loop();
 }
 
-/*
-* Convert string of form "255/255/255" to individual RGB values and turn on lights
-*/
 void changeColors(String command){
-  // Tokenize (split) each string into individual color values
-  char * red_value;
-  char * green_value;
-  char * blue_value;
+  String r = "";
+  r += command.charAt(0); 
+  r += command.charAt(1);
+  r += command.charAt(2);
+  String g = "";
+  g += command.charAt(4); 
+  g += command.charAt(5);
+  g += command.charAt(6);
+  String b = "";
+  b += command.charAt(8); 
+  b += command.charAt(9);
+  b += command.charAt(10);
 
-  red_value = strtok(colorString, "/");
-  green_value = strtok(colorString, "/");
-  blue_value = strtok(colorString, "/");
-
-  Serial.println(red_value);
-  Serial.println(green_value);
-  Serial.println(blue_value);
+  Serial.println(r);
+  Serial.println(g);
+  Serial.println(b);
   
-  // Turn on the lights
-  analogWrite(R_pin, (abs (red_value.toInt() - 255)));
-  analogWrite(G_pin, (abs (green_value.toInt() - 255)));
-  analogWrite(B_pin, (abs (blue_value.toInt() - 255)));
+  
+  analogWrite(R, (abs (r.toInt() - 255)));
+  analogWrite(G, (abs (g.toInt() - 255)));
+  analogWrite(B, (abs (b.toInt() - 255)));
 
 }
 
 void testLights(){
     analogWriteRange(255);
-    pinMode(R_pin, OUTPUT);
-    pinMode(G_pin, OUTPUT);
-    pinMode(B_pin, OUTPUT);
+    pinMode(R, OUTPUT);
+    pinMode(G, OUTPUT);
+    pinMode(B, OUTPUT);
     
-    analogWrite(R_pin, 255);
-    analogWrite(G_pin, 255);
-    analogWrite(B_pin, 255);
+    analogWrite(R, 255);
+    analogWrite(G, 255);
+    analogWrite(B, 255);
     
     delay(100);
     
     
-    analogWrite(R_pin, 0);
+    analogWrite(R, 0);
     delay(500);
-    analogWrite(R_pin, 255);
-    analogWrite(G_pin, 0);
+    analogWrite(R, 255);
+    analogWrite(G, 0);
     delay(500);
-    analogWrite(G_pin, 255);
-    analogWrite(B_pin, 0);
+    analogWrite(G, 255);
+    analogWrite(B, 0);
     delay(500);
-    analogWrite(B_pin, 255);
+    analogWrite(B, 255);
 }

@@ -9,8 +9,8 @@
 * IDENTIFICATION INFORMATION:
 */
 const int identificationNum = 1;
-const char* clientID = identificationNum.ToString().PadLeft(3, '0');
-const char* clientName = deviceID + "ESP8266Client";
+const char* clientID = "001";
+const char* clientName = "ESP8266Client";
 
 /*
 * WIFI INFORMATION:
@@ -55,13 +55,12 @@ void setup() {
   client.setCallback(callback);
  
   while (!client.connected()) {
-    Serial.println("Connecting to MQTT Broker" + mqttServer);
+    Serial.println("Connecting to MQTT Broker");
  
     // Connect to the MQTT broker with MQTT Information
     if (client.connect(clientName, mqttUser, mqttPassword)) {
       // Connection Succeed, callback function is called automatically when new message is detected
-      Serial.println("Connected to MQTT Broker: " + mqttServer);
-      Serial.println("Listening to Topic: " + clientID);
+      Serial.println("Connected to MQTT Broker");
     } else {
       // MQTT connection failed
       Serial.print("Failed to connect with state: ");
@@ -77,7 +76,8 @@ void setup() {
   client.subscribe(clientID);
 
   // Print MAC Addresses
-  Serial.println("MAC Address: " + WiFi.macAddress());
+  Serial.println("MAC Address: ");
+  Serial.println(WiFi.macAddress());
 }
 
 /*
@@ -92,7 +92,7 @@ void callback(char* topic, byte* data, unsigned int length) {
   }
 
   // change the lights based on the received color
-  changeColors(data);
+  changeColors((char*)data);
   
   // New line
   Serial.println("---------->");
@@ -108,7 +108,7 @@ void loop() {
 /*
 * Convert string of form "255/255/255" to individual RGB values and turn on lights
 */
-void changeColors(String colorString) {
+void changeColors(char* colorString) {
   // Set up light pins
   analogWriteRange(255);
   pinMode(R_pin, OUTPUT);
@@ -129,7 +129,7 @@ void changeColors(String colorString) {
   Serial.println(blue_value);
   
   // Turn on the lights
-  analogWrite(R_pin, (abs (red_value.toInt() - 255)));
-  analogWrite(G_pin, (abs (green_value.toInt() - 255)));
-  analogWrite(B_pin, (abs (blue_value.toInt() - 255)));
+  analogWrite(R_pin, (abs (atoi(red_value) - 255)));
+  analogWrite(G_pin, (abs (atoi(green_value) - 255)));
+  analogWrite(B_pin, (abs (atoi(blue_value) - 255)));
 }
