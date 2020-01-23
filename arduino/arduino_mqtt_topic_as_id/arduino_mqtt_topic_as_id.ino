@@ -62,13 +62,11 @@ void setup() {
       // Connection Succeed, callback function is called automatically when new message is detected
       Serial.println("Connected to MQTT Broker: " + mqttServer);
       Serial.println("Listening to Topic: " + clientID);
- 
     } else {
       // MQTT connection failed
       Serial.print("Failed to connect with state: ");
       Serial.print(client.state());
       delay(2000);
- 
     }
   }
 
@@ -80,17 +78,14 @@ void setup() {
 
   // Print MAC Addresses
   Serial.println("MAC Address: " + WiFi.macAddress());
- 
 }
 
 /*
 * Function called when new mqtt message is published to subscribed topic
 */
 void callback(char* topic, byte* data, unsigned int length) {
- 
   Serial.print("Message arrived in topic: ");
   Serial.println(topic);
- 
   Serial.print("Message:");
   for(int i = 0; i < length; i++) {
     Serial.print((char)data[i]);
@@ -98,9 +93,9 @@ void callback(char* topic, byte* data, unsigned int length) {
 
   // change the lights based on the received color
   changeColors(data);
- 
-  Serial.println("----------");
- 
+  
+  // New line
+  Serial.println("---------->");
 }
  
 /*
@@ -111,10 +106,9 @@ void loop() {
 }
 
 /*
-* Convert string of form 255/255/255 to individual RGB values and turn on lights
+* Convert string of form "255/255/255" to individual RGB values and turn on lights
 */
-void changeColors(String colorString){
-
+void changeColors(String colorString) {
   // Set up light pins
   analogWriteRange(255);
   pinMode(R_pin, OUTPUT);
@@ -138,5 +132,4 @@ void changeColors(String colorString){
   analogWrite(R_pin, (abs (red_value.toInt() - 255)));
   analogWrite(G_pin, (abs (green_value.toInt() - 255)));
   analogWrite(B_pin, (abs (blue_value.toInt() - 255)));
-
 }
