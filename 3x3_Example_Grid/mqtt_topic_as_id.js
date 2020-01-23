@@ -184,6 +184,7 @@ function clicked(id) {
             client.subscribe(i.toString().padStart(3, '0')); // TOPIC
             message = new Paho.MQTT.Message(colorsArray[i]); // MESSAGE
             message.destinationName = i.toString().padStart(3, '0'); //TOPIC
+            console.log("Sending message to topic: " + i.toString().padStart(3, '0'));	
             document.getElementById("messages").innerHTML += '<br><span><b> Sending Message To Topic:</b><br> ' + i.toString().padStart(3, '0') + '</span>';
             client.send(message);
         }
