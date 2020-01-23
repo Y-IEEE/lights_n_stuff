@@ -65,20 +65,20 @@ function number_to_color(number_array) {
 
 // CONVERT AN RGB ARRAY OF NUMBERS TO AN ARRAY OF STRINGS WHICH EACH ONE CORRESPONDING TO THAT LIGHT
 function number_to_color_array(number_array) {
-    let color_array = [""];
+    var color_array = [];
     for(var i = 0; i < (rows * cols); i++) {
         switch(number_array[i]) {
             case 0:
-                color_array = color_array.push("(000/000/000)");
+                color_array.push("(000/000/000)");
                 break;
             case 1:
-                color_array = color_array.push("(255/000/000)");
+                color_array.push("(255/000/000)");
                 break;
             case 2:
-                color_array = color_array.push("(000/255/000)");
+                color_array.push("(000/255/000)");
                 break;
             case 3:
-                color_array = color_array.push("(000/000/255)");
+                color_array.push("(000/000/255)");
                 break;
         }
     }
@@ -134,24 +134,24 @@ function onConnectionLost(responseObject) {
 function onMessageArrived(message) {
     console.log("Message Delivered: " + message.payloadString);	
     document.getElementById("messages").innerHTML += '<br><span><b> Message Delivered:</b><br> ' + message.payloadString + '</span>';
-    console.log("Received: " + lights);
-    lights = color_to_number(message.payloadString);
-    for(var i = 0; i < lights.length; i++) {
-        switch(lights[i]) {
-            case 0:
-                document.getElementById("button-"+i).style.background = "white";
-                break;
-            case 1:
-                document.getElementById("button-"+i).style.background = red;
-                break;
-            case 2:
-                document.getElementById("button-"+i).style.background = green;
-                break;
-            default:
-                document.getElementById("button-"+i).style.background = blue;
-                break;
-        }
-    }
+    // console.log("Received: " + lights);
+    // lights = color_to_number(message.payloadString);
+    // for(var i = 0; i < lights.length; i++) {
+    //     switch(lights[i]) {
+    //         case 0:
+    //             document.getElementById("button-"+i).style.background = "white";
+    //             break;
+    //         case 1:
+    //             document.getElementById("button-"+i).style.background = red;
+    //             break;
+    //         case 2:
+    //             document.getElementById("button-"+i).style.background = green;
+    //             break;
+    //         default:
+    //             document.getElementById("button-"+i).style.background = blue;
+    //             break;
+    //     }
+    // }
 }
 function clicked(id) {
     var finalMessage = "";
@@ -177,7 +177,7 @@ function clicked(id) {
     finalMessage = number_to_color(lights);	
     colorsArray = number_to_color_array(lights);
 
-    console.log("Sent: " + lights);
+    // console.log("Sent: " + lights);
     if(connected == true) {
         console.log("Button Clicked");
         for(var i = 0; i < colorsArray.length; i++) {
