@@ -106,9 +106,9 @@ function onConnectionLost(responseObject) {
 
 // called when a message arrives
 function onMessageArrived(message) {
-    //console.log("Message Delivered: " + message.payloadString);	
+    console.log("Message Delivered: " + message.payloadString);	
     document.getElementById("messages").innerHTML += '<br><span><b> Message Delivered:</b><br> ' + message.payloadString + '</span>';
-    console.log("received" + lights);
+    console.log("Received: " + lights);
     lights = color_to_number(message.payloadString);
     for(var i = 0; i < lights.length; i++) {
         switch(lights[i]) {
@@ -149,9 +149,9 @@ function clicked(id) {
     }
 
     finalMessage = number_to_color(lights);	
-    console.log("sent" + lights);
+    console.log("Sent: " + lights);
     if(connected == true) {
-        console.log("onClick");
+        console.log("Button Clicked");
         client.subscribe("/lights"); // TOPIC
         message = new Paho.MQTT.Message(finalMessage); // MESSAGE
         message.destinationName = "/lights";
