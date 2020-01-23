@@ -1,7 +1,8 @@
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 
-const char* deviceID = "001";
+const int ID = 1;
+const char* deviceID = ID.ToString().PadLeft(3, '0');
 const int R = 15;
 const int G = 12;
 const int B = 16;
@@ -36,7 +37,7 @@ void setup() {
  
     if (client.connect("ESP8266Client", mqttUser, mqttPassword )) {
  
-      Serial.println("connected");  
+      Serial.println("Connected");  
  
     } else {
  
@@ -48,7 +49,10 @@ void setup() {
   }
 
   client.publish(deviceID, "On & Connected");
-  client.subscribe("To Chips");
+
+  // TOPIC TO SUBSCRIBE TO
+  client.subscribe(deviceID);
+
   testLights();
   Serial.println(WiFi.macAddress());
  
@@ -64,37 +68,40 @@ void callback(char* topic, byte* data, unsigned int length) {
     Serial.print((char)data[i]);
   }
 
+
+  changeColors(data);
+
   //find data
-    bool getID = 0;
-    bool getCommand = 0;
-    String gotID = "";
-    String command = "";
-    for (int i=0; i < length; i++)
-    {
-      if ((char)data[i] ==')' && getCommand){
-        getCommand = 0;
-        //Serial.println(command);
-        changeColors(command);
-        break;}
+    // bool getID = 0;
+    // bool getCommand = 0;
+    // String gotID = "";
+    // String command = "";
+    // for (int i=0; i < length; i++)
+    // {
+    //   if ((char)data[i] ==')' && getCommand){
+    //     getCommand = 0;
+    //     //Serial.println(command);
+    //     changeColors(command);
+    //     break;}
       
-      if (getCommand){
-        command+=(char)data[i];}
+    //   if (getCommand){
+    //     command+=(char)data[i];}
       
-      if ((char)data[i] =='.'){
-        command = "";
-    //    Serial.println(gotID);
-        getID = 0;
-        if (gotID == deviceID){
-          getCommand=1;}}
+    //   if ((char)data[i] =='.'){
+    //     command = "";
+    // //    Serial.println(gotID);
+    //     getID = 0;
+    //     if (gotID == deviceID){
+    //       getCommand=1;}}
       
-      if (getID){
-        gotID+=(char)data[i];}
+    //   if (getID){
+    //     gotID+=(char)data[i];}
 
-      if (((char)data[i])=='('){
-        gotID = "";
-        getID = 1;}
+    //   if (((char)data[i])=='('){
+    //     gotID = "";
+    //     getID = 1;}
 
-    }
+    // }
   
  
   Serial.println();
