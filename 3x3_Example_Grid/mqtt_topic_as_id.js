@@ -69,16 +69,16 @@ function number_to_color_array(number_array) {
     for(var i = 0; i < (rows * cols); i++) {
         switch(number_array[i]) {
             case 0:
-                color_array.push("(000/000/000)");
+                color_array.push("000/000/000");
                 break;
             case 1:
-                color_array.push("(255/000/000)");
+                color_array.push("255/000/000");
                 break;
             case 2:
-                color_array.push("(000/255/000)");
+                color_array.push("000/255/000");
                 break;
             case 3:
-                color_array.push("(000/000/255)");
+                color_array.push("000/000/255");
                 break;
         }
     }
