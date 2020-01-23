@@ -9,8 +9,8 @@
 * IDENTIFICATION INFORMATION:
 */
 const int identificationNum = 1;
-const char* clientID = "001";
-const char* clientName = "ESP8266Client";
+const char* clientID = "00" + identificationNum;
+const char* clientName = "YIEEE_Pixel_" + identificationNum;
 
 /*
 * WIFI INFORMATION:
@@ -124,6 +124,7 @@ void changeColors(char* colorString) {
   green_value = strtok(colorString, "/");
   blue_value = strtok(colorString, "/");
 
+  // log the values
   Serial.println(red_value);
   Serial.println(green_value);
   Serial.println(blue_value);
