@@ -27,11 +27,11 @@ function color_to_number(color_array) {
     }
 
     for(var i = 0; i < color_array.length; i++) {
-        if(color_array[i] == "255/000/000") {
+        if(color_array[i] == "(255/000/000)") {
             number_array[i] = 1;
-        } else if(color_array[i] == "000/255/000") {
+        } else if(color_array[i] == "(000/255/000)") {
             number_array[i] = 2;
-        } else if(color_array[i] == "000/000/255") {
+        } else if(color_array[i] == "(000/000/255)") {
             number_array[i] = 3;
         } else {
             number_array[i] = 0;
