@@ -39,13 +39,27 @@ PubSubClient client(espClient);
 void setup() {
 
   Serial.begin(115200);
+
+  //set up pins as lights and turn all off
+  analogWriteRange(255);
+  pinMode(R_pin, OUTPUT);
+  pinMode(G_pin, OUTPUT);
+  pinMode(B_pin, OUTPUT);
+  analogWrite(R_pin, 255);
+  analogWrite(G_pin, 255);
+  analogWrite(B_pin, 255);
  
   // Loop until wifi connection succeeds
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
+    //flash blue while connecting
+    analogWrite(B_pin, 0);
+    delay(500);
+    analogWrite(B_pin, 255);
     delay(500);
     Serial.println("Connecting to WiFi...");
   }
+  analogWrite(B_pin, 255);
   Serial.println("Connected to the WiFi network");
 
   // Set up connection to MQTT broker
@@ -70,7 +84,7 @@ void setup() {
   }
 
   // Publish that we've connected to the MQTT Broker
-  // client.publish(clientID, "On & Connected");
+  client.publish(clientID, "On & Connected");
 
   // Subscribe to devices topic
   client.subscribe(clientID);
@@ -135,10 +149,6 @@ void changeColors(String command) {
 }
 
 void testLights() {
-  analogWriteRange(255);
-  pinMode(R_pin, OUTPUT);
-  pinMode(G_pin, OUTPUT);
-  pinMode(B_pin, OUTPUT);
 
   analogWrite(R_pin, 255);
   analogWrite(G_pin, 255);
