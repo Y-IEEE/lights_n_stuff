@@ -16,53 +16,6 @@ var red = "#D8554B";
 var green = "#64B743"
 var blue = "#4BAED8";
 
-// CONVERT A STRING OF COLORS AND IDS TO AN RGB ARRAY OF NUMBERS
-function color_to_number(color_array) {
-    var number_array = [];
-    color_array = color_array.substr(1);
-    color_array = color_array.substr(0, color_array.length - 1);
-    color_array = color_array.split(")(");
-    for(var i = 0; i < color_array.length; i++) {
-        color_array[i] = color_array[i].substr(4);
-    }
-
-    for(var i = 0; i < color_array.length; i++) {
-        if(color_array[i] == "(255/000/000)") {
-            number_array[i] = 1;
-        } else if(color_array[i] == "(000/255/000)") {
-            number_array[i] = 2;
-        } else if(color_array[i] == "(000/000/255)") {
-            number_array[i] = 3;
-        } else {
-            number_array[i] = 0;
-        }
-    }
-    
-    return number_array;
-}
-
-// CONVERT AND RGB ARRAY OF NUMBERS TO A SINGLE STRING
-function number_to_color(number_array) {
-    var color_array = "";
-    for(var i = 0; i < (rows * cols); i++) {
-        switch(number_array[i]) {
-            case 0:
-                color_array = color_array.concat("(" + i.toString().padStart(3, '0') + "." + "000/000/000" + ")");
-                break;
-            case 1:
-                color_array = color_array.concat("(" + i.toString().padStart(3, '0') + "." + "255/000/000" + ")");
-                break;
-            case 2:
-                color_array = color_array.concat("(" + i.toString().padStart(3, '0') + "." + "000/255/000" + ")");
-                break;
-            case 3:
-                color_array = color_array.concat("(" + i.toString().padStart(3, '0') + "." + "000/000/255" + ")");
-                break;
-        }
-    }
-    return color_array;
-}
-
 // CONVERT AN RGB ARRAY OF NUMBERS TO AN ARRAY OF STRINGS WHICH EACH ONE CORRESPONDING TO THAT LIGHT
 function number_to_color_array(number_array) {
     var color_array = [];
@@ -134,25 +87,8 @@ function onConnectionLost(responseObject) {
 function onMessageArrived(message) {
     console.log("Message Delivered: " + message.payloadString);	
     document.getElementById("messages").innerHTML += '<br><span><b> Message Delivered:</b><br> ' + message.payloadString + '</span>';
-    // console.log("Received: " + lights);
-    // lights = color_to_number(message.payloadString);
-    // for(var i = 0; i < lights.length; i++) {
-    //     switch(lights[i]) {
-    //         case 0:
-    //             document.getElementById("button-"+i).style.background = "white";
-    //             break;
-    //         case 1:
-    //             document.getElementById("button-"+i).style.background = red;
-    //             break;
-    //         case 2:
-    //             document.getElementById("button-"+i).style.background = green;
-    //             break;
-    //         default:
-    //             document.getElementById("button-"+i).style.background = blue;
-    //             break;
-    //     }
-    // }
 }
+
 function clicked(id) {
     var finalMessage = "";
     switch(lights[id]) {
@@ -174,7 +110,6 @@ function clicked(id) {
             break;
     }
 
-    finalMessage = number_to_color(lights);	
     colorsArray = number_to_color_array(lights);
 
     // console.log("Sent: " + lights);
@@ -192,6 +127,4 @@ function clicked(id) {
     } else {
         location.reload();
     }
-
-    // console.log(finalMessage);
 }
