@@ -10,6 +10,11 @@ A simple implementation of Paho MQTT using cloud MQTT as a broker, more informat
 
 ## Potential Buildings:
 
+### Swenson:
+  - **Resolution:** 4 x 10 (40)
+  - Undergoing renovations
+  - Long walkway in front
+  
 ### KBT:
   - **Resolution:** 5 x 10 (50)
   - Undergoing renovations
@@ -26,9 +31,6 @@ A simple implementation of Paho MQTT using cloud MQTT as a broker, more informat
   - No ouside view
   - Decent view from inside
   - Classrooms and lbrary on top floor
-
-### Swenson:
-  - **Resolution:** 
 
 ### Becton:
   - **Resolution:** 4 x 50 (200)
