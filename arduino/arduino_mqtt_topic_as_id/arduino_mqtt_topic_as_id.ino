@@ -8,9 +8,8 @@
 /*
 * IDENTIFICATION INFORMATION:
 */
-const int identificationNum = 1;
-const char* clientID = "00" + identificationNum;
-const char* clientName = "YIEEE_Pixel_" + identificationNum;
+const char* clientID = "00x00"
+const char* clientName = "YIEEE_Pixel_" + clientID;
 
 /*
 * WIFI INFORMATION:

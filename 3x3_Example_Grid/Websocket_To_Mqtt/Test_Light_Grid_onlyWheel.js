@@ -8,11 +8,6 @@ var connected = false;
 const socket = io();
 
 
-// MISC INFO
-var red = "#D8554B";
-var green = "#64B743"
-var blue = "#4BAED8";
-
 // COLOR WHEEL STUFF
 var colorWheel = new iro.ColorPicker("#colorWheel", {
 
@@ -62,13 +57,8 @@ function clicked(id) {
     if(connected == true) {
         for(var i = 0; i < lights.length; i++) {
             var id = i.toString().padStart(3, '0');
-            socket.emit("lights", {"id": id, "color": lights[i].substring(1)});
-            // client.subscribe(i.toString().padStart(3, '0')); // TOPIC
-            // message = new Paho.MQTT.Message(colorsArray[i]); // MESSAGE
-            // message.destinationName = i.toString().padStart(3, '0'); //TOPIC
-            console.log("Sending \"" + lights[i].substring(1) + "\" to topic: " + id);	
-            // document.getElementById("messages").innerHTML += '<br><span><b> Sending Message To Topic:</b><br> ' + id + '</span>';
-            // client.send(message);
+            socket.emit("lights", {"id": (id%cols).toString().padStart(2, '0') + "x" + Math.floor(id/cols).toString().padStart(2, '0'), "color": lights[i].substring(1)});
+            console.log("Sending \"" + lights[i].substring(1) + "\" to topic: " + (id%cols).toString().padStart(2, '0') + "x" + Math.floor(id/cols).toString().padStart(2, '0'));	
         }
         
     } else {

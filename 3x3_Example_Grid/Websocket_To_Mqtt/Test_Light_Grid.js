@@ -1,7 +1,7 @@
 // BOARD INFO
 var rows = 3;
 var cols = 3;
-var lights = [0,0,0,0,0,0,0,0,0];
+var lights = Array(rows*cols).fill(0);
 
 // WEBSOCKET INFO
 var connected = false;
@@ -45,7 +45,7 @@ var colorWheel = new iro.ColorPicker("#colorWheel", {
 // CONVERT AN RGB ARRAY OF NUMBERS TO AN ARRAY OF STRINGS WHICH EACH ONE CORRESPONDING TO THAT LIGHT
 function number_to_color_array(number_array) {
     var color_array = [];
-    for(var i = 0; i < (rows * cols); i++) {
+    for(var i = 0; i < number_array.length; i++) {
         switch(number_array[i]) {
             case 0:
                 color_array.push("000000");
