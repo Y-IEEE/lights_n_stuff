@@ -1,0 +1,34 @@
+03x03
+2
+
+ffffff	ffffff	ffffff
+ffffff	ffffff	ffffff
+ffffff	ffffff	ffffff
+
+ffffff	ffffff	ffffff
+ffffff	ffffff	ffffff
+6966ff	ffffff	ffffff
+
+ffffff	ffffff	ffffff
+6966ff	ffffff	ffffff
+002aff	6966ff	ffffff
+
+6966ff	ffffff	ffffff
+002aff	6966ff	ffffff
+6966ff	002aff	6966ff
+
+002aff	6966ff	ffffff
+6966ff	002aff	6966ff
+ffffff	6966ff	002aff
+
+6966ff	002aff	6966ff
+ffffff	6966ff	002aff
+ffffff	ffffff	6966ff
+
+ffffff	6966ff	002aff
+ffffff	ffffff	6966ff
+ffffff	ffffff	ffffff
+
+ffffff	ffffff	6966ff
+ffffff	ffffff	ffffff
+ffffff	ffffff	ffffff
