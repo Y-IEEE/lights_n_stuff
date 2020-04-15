@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import context  # Ensures paho is in PYTHONPATH
+#import context  # Ensures paho is in PYTHONPATH
 import paho.mqtt.client as mqtt
 import os
 import time
