@@ -7,7 +7,9 @@ def on_connect(mqttc, obj, flags, rc):
 def on_message(mqttc, obj, msg):
     global gotSize, xSize, ySize
     #get the size of the array being sent
-    if (msg.topic == "size") and (not gotSize):
+    if (msg.topic == "size"):
+        print("PAYLOAD SIZE: ", msg.payload)
+
         xNum = int(str(msg.payload)[2:4])
         yNum = int(str(msg.payload)[5:7])
         #go through and subscribe to all necessary commands
@@ -21,7 +23,8 @@ def on_message(mqttc, obj, msg):
         ySize = int(height / yNum)
         #print("width: " + str(xSize) + " height: "+ str(ySize))
         gotSize = True
-    elif(gotSize):  #when you get a command
+    else:  #when you get a command
+        print("PAYLOAD CMD: ", msg.payload)
         xID = int(str(msg.topic)[0:2])  
         yID = int(str(msg.topic)[3:5])
         #set rectangle at correct location to color in payload

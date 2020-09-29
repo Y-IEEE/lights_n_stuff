@@ -15,7 +15,7 @@ def on_message(mqttc, obj, msg):
 
 
 def on_publish(mqttc, obj, mid):
-    print("mid: " + obj)
+    print("mid: " + str(obj))
 
 
 def on_subscribe(mqttc, obj, mid, granted_qos):
@@ -46,6 +46,7 @@ size = file.readline()
 xSize = int(size[0:2])
 ySize = int(size[3:5])
 print("x:", xSize, "y:", ySize)
+
 mqttc.publish("size", size[0:5])
 
 fps = int(file.readline())
