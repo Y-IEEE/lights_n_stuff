@@ -123,18 +123,22 @@ socket.on("lights", function(data) {
     switch(data.color) {
         case "000000":
             color = "white";
+            lights[parseInt(id)] = 1;
             break;
 
         case "ff0000":
             color = red;
+            lights[parseInt(id)] = 2;
             break;
 
         case "00ff00":
             color = green;
+            lights[parseInt(id)] = 3;
             break;
 
         case "0000ff":
             color = blue;
+            lights[parseInt(id)] = 0;
             break;
     }
 
