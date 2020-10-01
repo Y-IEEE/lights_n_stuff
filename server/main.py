@@ -40,7 +40,7 @@ def base():
 @socketio.on("lights")
 def change_lights_message(message):
     print("[LIGHTS] : " + str(message))
-    emit(message, json=True)
+    emit("lights", message, json=True)
     change_colors(message["id"], message["color"])
 
 @socketio.on("info")
