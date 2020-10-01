@@ -1,5 +1,5 @@
 03x03
-2
+30
 
 ffffff	ffffff	ffffff
 ffffff	ffffff	ffffff

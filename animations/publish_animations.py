@@ -59,7 +59,7 @@ while True:
         if wholeLine == '':
             print("EOF")
             mqttc.publish("size", size[0:5])
-            file.seek(12, os.SEEK_SET)
+            file.seek(13, os.SEEK_SET) # 12 for single digit fps
             wholeLine = file.readline()
         lineWords = wholeLine.split()
         for x in range(0, xSize):
