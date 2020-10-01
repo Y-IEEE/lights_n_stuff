@@ -1,6 +1,6 @@
 from flask import Flask, render_template
 from flask_mqtt import Mqtt
-from flask_socketio import SocketIO
+from flask_socketio import SocketIO, send
 import time
 import os
 
@@ -40,6 +40,7 @@ def base():
 @socketio.on("lights")
 def change_lights_message(message):
     print("[LIGHTS] : " + str(message))
+    send(message, json=True)
     change_colors(message["id"], message["color"])
 
 @socketio.on("info")

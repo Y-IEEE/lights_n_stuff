@@ -67,6 +67,7 @@ function number_to_color_array(number_array) {
 
 socket.on('connect', function() {
     socket.emit("info", "Socket Client Connected!");
+    console.log("Socket client connected!")
     connected = true;
 });
 
@@ -74,24 +75,24 @@ socket.on('connect', function() {
 
 function clicked(id) {
     var finalMessage = "";
-    switch(lights[id]) {
-        case 0:
-            lights[id] = 1;
-            document.getElementById("button-"+id).style.background = red;
-            break;
-        case 1:
-            lights[id] = 2;
-            document.getElementById("button-"+id).style.background = green;
-            break;
-        case 2:
-            lights[id] = 3;
-            document.getElementById("button-"+id).style.background = blue;
-            break;
-        default:
-            lights[id] = 0;
-            document.getElementById("button-"+id).style.background = "white";
-            break;
-    }
+    // switch(lights[id]) {
+    //     case 0:
+    //         lights[id] = 1;
+    //         document.getElementById("button-"+id).style.background = red;
+    //         break;
+    //     case 1:
+    //         lights[id] = 2;
+    //         document.getElementById("button-"+id).style.background = green;
+    //         break;
+    //     case 2:
+    //         lights[id] = 3;
+    //         document.getElementById("button-"+id).style.background = blue;
+    //         break;
+    //     default:
+    //         lights[id] = 0;
+    //         document.getElementById("button-"+id).style.background = "white";
+    //         break;
+    // }
 
     colorsArray = number_to_color_array(lights);
     console.log(colorsArray);
@@ -114,5 +115,14 @@ function clicked(id) {
         location.reload();
     }
 }
+
+socket.on("lights", function(data) {
+    var id = data.id;
+    var color = data.color;
+
+    console.log("Light callback received!");
+
+    document.getElementById("button-"+id).style.background = color;
+})
 
 
