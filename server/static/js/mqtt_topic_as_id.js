@@ -75,24 +75,24 @@ socket.on('connect', function() {
 
 function clicked(id) {
     var finalMessage = "";
-    // switch(lights[id]) {
-    //     case 0:
-    //         lights[id] = 1;
-    //         document.getElementById("button-"+id).style.background = red;
-    //         break;
-    //     case 1:
-    //         lights[id] = 2;
-    //         document.getElementById("button-"+id).style.background = green;
-    //         break;
-    //     case 2:
-    //         lights[id] = 3;
-    //         document.getElementById("button-"+id).style.background = blue;
-    //         break;
-    //     default:
-    //         lights[id] = 0;
-    //         document.getElementById("button-"+id).style.background = "white";
-    //         break;
-    // }
+    switch(lights[id]) {
+        case 0:
+            lights[id] = 1;
+            // document.getElementById("button-"+id).style.background = red;
+            break;
+        case 1:
+            lights[id] = 2;
+            // document.getElementById("button-"+id).style.background = green;
+            break;
+        case 2:
+            lights[id] = 3;
+            // document.getElementById("button-"+id).style.background = blue;
+            break;
+        default:
+            lights[id] = 0;
+            // document.getElementById("button-"+id).style.background = "white";
+            break;
+    }
 
     colorsArray = number_to_color_array(lights);
     console.log(colorsArray);
@@ -118,7 +118,25 @@ function clicked(id) {
 
 socket.on("lights", function(data) {
     var id = data.id;
-    var color = data.color;
+    var color;
+
+    switch(data.color) {
+        case "000000":
+            color = "white";
+            break;
+
+        case "ff0000":
+            color = red;
+            break;
+
+        case "00ff00":
+            color = green;
+            break;
+
+        case "0000ff":
+            color = blue;
+            break;
+    }
 
     console.log("Light callback received!");
     console.log(data);
