@@ -121,6 +121,7 @@ socket.on("lights", function(data) {
     var color = data.color;
 
     console.log("Light callback received!");
+    console.log(data);
 
     document.getElementById("button-"+id).style.background = color;
 })
