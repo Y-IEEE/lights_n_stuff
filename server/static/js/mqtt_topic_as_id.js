@@ -95,7 +95,18 @@ function clicked(id) {
 window.onload = function() {
     for (var i = 0; i < 9; i++) {
         document.getElementById("button-"+ parseInt(i)).addEventListener("click", function() {
-            clicked(i);
+            id = this.id[this.id.length-1]
+
+            if (connected == true) {
+                console.log("Button Clicked");
+        
+                console.log("Color: " + colorWheel.color.hexSstring);
+                document.getElementById("button-"+ parseInt(id)).style.background = colorWheel.color.hexSstring;
+                socket.emit("client_update_light", {"id": id, "color": colorWheel.color.hexSstring});
+                
+            } else {
+                location.reload();
+            }
         });
     }
 }
