@@ -95,7 +95,7 @@ function clicked(id) {
         // }
 
         document.getElementById("button-"+ parseInt(id)).style.background = colorWheel.color.hexSstring;
-        socket.emit("client_update_light", {"id": id, "color": colorWheel.color.rgb});
+        socket.emit("client_update_light", {"id": id, "color": colorWheel.color.hexSstring});
         
     } else {
         location.reload();

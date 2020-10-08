@@ -30,6 +30,7 @@ class LightNode:
         self._color = newCol
 
 grid_list = []
+num_clients = 0
 
 def set_up_grid(width, height):
     global grid_list
@@ -77,12 +78,19 @@ def print_debug(message):
 # when client connects to site
 @socketio.on("connect")
 def on_connect():
-    print("[CONNECTION]: Socket connected!")
+    global num_clients
+    num_clients += 1
+    print("[CONNECTION]: Socket connected! Active Clients = {}".format(num_clients))
 
     # send the newly connected client the current color statuses
     for node in grid_list:
         update_light(node.get_id(), node.get_color())
 
+@socketio.on("disconnect")
+def on_disconnect():
+    global num_clients
+    num_clients -= 1
+    print("[DISCONNECTION]: Client disconnected! Active Clients = {}".format(num_clients))
 
 @app.route('/')
 def base():
