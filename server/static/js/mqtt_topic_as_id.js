@@ -94,7 +94,7 @@ function clicked(id) {
         //     // client.send(message);
         // }
 
-        document.getElementById("button-"+ parseInt(id)).style.background = colorWheel.color.rgb;
+        document.getElementById("button-"+ parseInt(id)).style.background = colorWheel.color.hexSstring;
         socket.emit("client_update_light", {"id": id, "color": colorWheel.color.rgb});
         
     } else {
@@ -102,7 +102,7 @@ function clicked(id) {
     }
 }
 
-socket.on("update_light", function(data) {
+socket.on("server_update_light", function(data) {
     var id = data.id;
     var color = data.color;
 

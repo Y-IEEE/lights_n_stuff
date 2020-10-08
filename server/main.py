@@ -26,6 +26,9 @@ class LightNode:
     def get_color(self):
         return self._color
 
+    def set_color(self, newCol):
+        self._color = newCol
+
 grid_list = []
 
 def set_up_grid(width, height):
@@ -34,7 +37,7 @@ def set_up_grid(width, height):
 
 def update_light(light_id, val):
     message = {"id": light_id, "color": val}
-    emit("update_light", message, json=True, broadcast=True)
+    emit("server_update_light", message, json=True, broadcast=True)
 
 @mqtt.on_connect()
 def handle_connect(client, userdata, flags, rc):
@@ -53,11 +56,18 @@ def change_colors(chip_id, color):
     mqtt.publish(chip_id, color)
 
 # receive light change command from client
-@socketio.on("client_light_update")
+@socketio.on("client_update_light")
 def change_lights_message(message):
     print("[LIGHTS] : " + str(message))
     # emit("lights", message, json=True, broadcast=True)
+
+    # change colors on MQTT
     change_colors(message["id"], message["color"])
+
+    # update internal light array, id = index which is really bad rn, find a better way of doing this
+    grid_list[int(message['id'])].set_color(message['color'])
+
+    
 
 # debug channel
 @socketio.on("info")
