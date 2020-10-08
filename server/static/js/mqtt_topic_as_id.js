@@ -69,78 +69,42 @@ socket.on('connect', function() {
     socket.emit("info", "Socket Client Connected!");
     console.log("Socket client connected!")
     connected = true;
+
+
 });
 
 
 
 function clicked(id) {
-    var finalMessage = "";
-    switch(lights[id]) {
-        case 0:
-            lights[id] = 1;
-            // document.getElementById("button-"+id).style.background = red;
-            break;
-        case 1:
-            lights[id] = 2;
-            // document.getElementById("button-"+id).style.background = green;
-            break;
-        case 2:
-            lights[id] = 3;
-            // document.getElementById("button-"+id).style.background = blue;
-            break;
-        default:
-            lights[id] = 0;
-            // document.getElementById("button-"+id).style.background = "white";
-            break;
-    }
 
     colorsArray = number_to_color_array(lights);
     console.log(colorsArray);
     // console.log("Sent: " + lights);
     if(connected == true) {
         console.log("Button Clicked");
-        for(var i = 0; i < colorsArray.length; i++) {
-            console.log("In array loop");
-            var id = i.toString().padStart(3, '0');
-            socket.emit("lights", {"id": id, "color": colorsArray[i]});
-            // client.subscribe(i.toString().padStart(3, '0')); // TOPIC
-            // message = new Paho.MQTT.Message(colorsArray[i]); // MESSAGE
-            // message.destinationName = i.toString().padStart(3, '0'); //TOPIC
-            console.log("Sending message to topic: " + id);	
-            // document.getElementById("messages").innerHTML += '<br><span><b> Sending Message To Topic:</b><br> ' + id + '</span>';
-            // client.send(message);
-        }
+        // for(var i = 0; i < colorsArray.length; i++) {
+        //     console.log("In array loop");
+        //     var id = i.toString().padStart(3, '0');
+        //     socket.emit("lights", {"id": id, "color": colorsArray[i]});
+        //     // client.subscribe(i.toString().padStart(3, '0')); // TOPIC
+        //     // message = new Paho.MQTT.Message(colorsArray[i]); // MESSAGE
+        //     // message.destinationName = i.toString().padStart(3, '0'); //TOPIC
+        //     console.log("Sending message to topic: " + id);	
+        //     // document.getElementById("messages").innerHTML += '<br><span><b> Sending Message To Topic:</b><br> ' + id + '</span>';
+        //     // client.send(message);
+        // }
+
+        document.getElementById("button-"+ parseInt(id)).style.background = colorWheel.color.rgb;
+        socket.emit("client_update_light", {"id": id, "color": colorWheel.color.rgb});
         
     } else {
         location.reload();
     }
 }
 
-socket.on("lights", function(data) {
+socket.on("update_light", function(data) {
     var id = data.id;
-    var color;
-
-    switch(data.color) {
-        case "000000":
-            color = "white";
-            // lights[parseInt(id)] = 1; // not needed
-            break;
-
-        case "ff0000":
-            color = red;
-            // lights[parseInt(id)] = 2;
-            break;
-
-        case "00ff00":
-            color = green;
-            // lights[parseInt(id)] = 3;
-            break;
-
-        case "0000ff":
-            color = blue;
-            // lights[parseInt(id)] = 0;
-            break;
-    }
+    var color = data.color;
 
     console.log("Light callback received!");
     console.log(data);
