@@ -54,7 +54,7 @@ def handle_connect(client, userdata, flags, rc):
 #     print(data)
 
 def change_colors(chip_id, color):
-    mqtt.publish(chip_id, color)
+    mqtt.publish(str(chip_id), color)
 
 # receive light change command from client
 @socketio.on("client_update_light")

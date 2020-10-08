@@ -66,7 +66,6 @@ function number_to_color_array(number_array) {
 }
 
 socket.on('connect', function() {
-    socket.emit("info", "Socket Client Connected!");
     console.log("Socket client connected!")
     connected = true;
 
@@ -85,7 +84,7 @@ function clicked(id) {
         // for(var i = 0; i < colorsArray.length; i++) {
         //     console.log("In array loop");
         //     var id = i.toString().padStart(3, '0');
-        //     socket.emit("lights", {"id": id, "color": colorsArray[i]});
+            // socket.emit("lights", {"id": id, "color": colorsArray[i]});
         //     // client.subscribe(i.toString().padStart(3, '0')); // TOPIC
         //     // message = new Paho.MQTT.Message(colorsArray[i]); // MESSAGE
         //     // message.destinationName = i.toString().padStart(3, '0'); //TOPIC
@@ -93,7 +92,7 @@ function clicked(id) {
         //     // document.getElementById("messages").innerHTML += '<br><span><b> Sending Message To Topic:</b><br> ' + id + '</span>';
         //     // client.send(message);
         // }
-
+        console.log("Color: " + colorWheel.color.hexSstring);
         document.getElementById("button-"+ parseInt(id)).style.background = colorWheel.color.hexSstring;
         socket.emit("client_update_light", {"id": id, "color": colorWheel.color.hexSstring});
         
