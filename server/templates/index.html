@@ -21,6 +21,36 @@
 				socket.emit("topic", {data: 'I\'m connected!'});
 			});
 		</script> -->
+
+		<script type="text/javascript">
+		// COLOR WHEEL STUFF
+var colorWheel = new iro.ColorPicker("#colorWheel", {
+
+    layout: [
+    { 
+      component: iro.ui.Wheel,
+      options: {
+        wheelLightness: true,
+        wheelAngle: 0,
+        wheelDirection: "anticlockwise"
+      } 
+    },
+    {
+      component: iro.ui.Box,
+      options: {
+        // see below
+      }
+    },
+    {
+      component: iro.ui.Slider,
+      options: {
+        sliderType: 'hue', // can also be 'saturation', 'value', 'alpha' or 'kelvin',
+        sliderShape: 'circle'
+      }
+    }
+    ]
+  
+});</script>
 		
 
 	<body>

@@ -13,34 +13,34 @@ var red = "#D8554B";
 var green = "#64B743"
 var blue = "#4BAED8";
 
-// COLOR WHEEL STUFF
-var colorWheel = new iro.ColorPicker("#colorWheel", {
+// // COLOR WHEEL STUFF
+// var colorWheel = new iro.ColorPicker("#colorWheel", {
 
-    layout: [
-    { 
-      component: iro.ui.Wheel,
-      options: {
-        wheelLightness: true,
-        wheelAngle: 0,
-        wheelDirection: "anticlockwise"
-      } 
-    },
-    {
-      component: iro.ui.Box,
-      options: {
-        // see below
-      }
-    },
-    {
-      component: iro.ui.Slider,
-      options: {
-        sliderType: 'hue', // can also be 'saturation', 'value', 'alpha' or 'kelvin',
-        sliderShape: 'circle'
-      }
-    }
-    ]
+//     layout: [
+//     { 
+//       component: iro.ui.Wheel,
+//       options: {
+//         wheelLightness: true,
+//         wheelAngle: 0,
+//         wheelDirection: "anticlockwise"
+//       } 
+//     },
+//     {
+//       component: iro.ui.Box,
+//       options: {
+//         // see below
+//       }
+//     },
+//     {
+//       component: iro.ui.Slider,
+//       options: {
+//         sliderType: 'hue', // can also be 'saturation', 'value', 'alpha' or 'kelvin',
+//         sliderShape: 'circle'
+//       }
+//     }
+//     ]
   
-});
+// });
 
 // CONVERT AN RGB ARRAY OF NUMBERS TO AN ARRAY OF STRINGS WHICH EACH ONE CORRESPONDING TO THAT LIGHT
 function number_to_color_array(number_array) {
@@ -81,17 +81,7 @@ function clicked(id) {
     // console.log("Sent: " + lights);
     if(connected == true) {
         console.log("Button Clicked");
-        // for(var i = 0; i < colorsArray.length; i++) {
-        //     console.log("In array loop");
-        //     var id = i.toString().padStart(3, '0');
-            // socket.emit("lights", {"id": id, "color": colorsArray[i]});
-        //     // client.subscribe(i.toString().padStart(3, '0')); // TOPIC
-        //     // message = new Paho.MQTT.Message(colorsArray[i]); // MESSAGE
-        //     // message.destinationName = i.toString().padStart(3, '0'); //TOPIC
-        //     console.log("Sending message to topic: " + id);	
-        //     // document.getElementById("messages").innerHTML += '<br><span><b> Sending Message To Topic:</b><br> ' + id + '</span>';
-        //     // client.send(message);
-        // }
+
         console.log("Color: " + colorWheel.color.hexSstring);
         document.getElementById("button-"+ parseInt(id)).style.background = colorWheel.color.hexSstring;
         socket.emit("client_update_light", {"id": id, "color": colorWheel.color.hexSstring});
