@@ -92,9 +92,12 @@ function clicked(id) {
 }
 
 // add event listeners
-for (var i = 0; i < 9; i++) {
-    document.getElementById("button-"+ parseInt(i)).addEventListener("click", clicked(i));
+window.onload = function() {
+    for (var i = 0; i < 9; i++) {
+        document.getElementById("button-"+ parseInt(i)).addEventListener("click", clicked(i));
+    }
 }
+
 
 socket.on("server_update_light", function(data) {
     var id = data.id;
