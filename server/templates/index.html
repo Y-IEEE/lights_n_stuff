@@ -21,53 +21,23 @@
 				socket.emit("topic", {data: 'I\'m connected!'});
 			});
 		</script> -->
-
-		<script type="text/javascript">
-		// COLOR WHEEL STUFF
-var colorWheel = new iro.ColorPicker("#colorWheel", {
-
-    layout: [
-    { 
-      component: iro.ui.Wheel,
-      options: {
-        wheelLightness: true,
-        wheelAngle: 0,
-        wheelDirection: "anticlockwise"
-      } 
-    },
-    {
-      component: iro.ui.Box,
-      options: {
-        // see below
-      }
-    },
-    {
-      component: iro.ui.Slider,
-      options: {
-        sliderType: 'hue', // can also be 'saturation', 'value', 'alpha' or 'kelvin',
-        sliderShape: 'circle'
-      }
-    }
-    ]
-  
-});</script>
-		
+	
 
 	<body>
 		<div class="card bg-light mb-3" style="max-width: 38em; margin: auto; margin-top: 2em;">
 			<div class="card-header h1">3x3 Light Grid</div>
 			<div class="card-body" style="text-align: center;">
-				<button id="button-0" onclick="clicked('0')">0</button>
-				<button id="button-1" onclick="clicked('1')">1</button>
-				<button id="button-2" onclick="clicked('2')">2</button>
+				<button id="button-0">0</button>
+				<button id="button-1">1</button>
+				<button id="button-2">2</button>
 				<br>
-				<button id="button-3" onclick="clicked('3')">3</button>
-				<button id="button-4" onclick="clicked('4')">4</button>
-				<button id="button-5" onclick="clicked('5')">5</button>
+				<button id="button-3">3</button>
+				<button id="button-4">4</button>
+				<button id="button-5">5</button>
 				<br>
-				<button id="button-6" onclick="clicked('6')">6</button>
-				<button id="button-7" onclick="clicked('7')">7</button>
-				<button id="button-8" onclick="clicked('8')">8</button>
+				<button id="button-6">6</button>
+				<button id="button-7">7</button>
+				<button id="button-8">8</button>
 				<br>
 			</div>
 		</div>

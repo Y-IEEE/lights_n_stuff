@@ -14,33 +14,33 @@ var green = "#64B743"
 var blue = "#4BAED8";
 
 // // COLOR WHEEL STUFF
-// var colorWheel = new iro.ColorPicker("#colorWheel", {
+var colorWheel = new iro.ColorPicker("#colorWheel", {
 
-//     layout: [
-//     { 
-//       component: iro.ui.Wheel,
-//       options: {
-//         wheelLightness: true,
-//         wheelAngle: 0,
-//         wheelDirection: "anticlockwise"
-//       } 
-//     },
-//     {
-//       component: iro.ui.Box,
-//       options: {
-//         // see below
-//       }
-//     },
-//     {
-//       component: iro.ui.Slider,
-//       options: {
-//         sliderType: 'hue', // can also be 'saturation', 'value', 'alpha' or 'kelvin',
-//         sliderShape: 'circle'
-//       }
-//     }
-//     ]
+    layout: [
+    { 
+      component: iro.ui.Wheel,
+      options: {
+        wheelLightness: true,
+        wheelAngle: 0,
+        wheelDirection: "anticlockwise"
+      } 
+    },
+    {
+      component: iro.ui.Box,
+      options: {
+        // see below
+      }
+    },
+    {
+      component: iro.ui.Slider,
+      options: {
+        sliderType: 'hue', // can also be 'saturation', 'value', 'alpha' or 'kelvin',
+        sliderShape: 'circle'
+      }
+    }
+    ]
   
-// });
+});
 
 // CONVERT AN RGB ARRAY OF NUMBERS TO AN ARRAY OF STRINGS WHICH EACH ONE CORRESPONDING TO THAT LIGHT
 function number_to_color_array(number_array) {
@@ -91,6 +91,11 @@ function clicked(id) {
     }
 }
 
+// add event listeners
+for (var i = 0; i < 9; i++) {
+    document.getElementById("button-"+ parseInt(i)).addEventListener("click", clicked(i))
+}
+
 socket.on("server_update_light", function(data) {
     var id = data.id;
     var color = data.color;
@@ -100,5 +105,7 @@ socket.on("server_update_light", function(data) {
 
     document.getElementById("button-"+ parseInt(id)).style.background = color;
 })
+
+
 
 
