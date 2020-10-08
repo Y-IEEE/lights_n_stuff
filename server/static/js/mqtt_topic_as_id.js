@@ -94,7 +94,9 @@ function clicked(id) {
 // add event listeners
 window.onload = function() {
     for (var i = 0; i < 9; i++) {
-        document.getElementById("button-"+ parseInt(i)).addEventListener("click", clicked(i));
+        document.getElementById("button-"+ parseInt(i)).addEventListener("click", function() {
+            clicked(i);
+        });
     }
 }
 
