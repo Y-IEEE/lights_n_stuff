@@ -106,5 +106,5 @@ def base():
 
 
 if __name__ == '__main__':
-    socketio.run(app, host='0.0.0.0')
     set_up_grid(3, 3)
+    socketio.run(app, host='0.0.0.0')
