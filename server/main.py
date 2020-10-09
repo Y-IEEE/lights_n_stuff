@@ -59,6 +59,7 @@ def change_colors(chip_id, color):
 # receive light change command from client
 @socketio.on("client_update_light")
 def change_lights_message(message):
+    global grid_list
     print("[LIGHTS] : " + str(message))
     # emit("lights", message, json=True, broadcast=True)
 
