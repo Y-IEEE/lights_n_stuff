@@ -29,6 +29,9 @@ class LightNode:
     def set_color(self, newCol):
         self._color = newCol
 
+    def __str__(self):
+        return "[{}]: {}".format(self._id, self._color)
+
 grid_list = []
 num_clients = 0
 
@@ -82,6 +85,8 @@ def on_connect():
     global num_clients
     num_clients += 1
     print("[CONNECTION]: Socket connected! Active Clients = {}".format(num_clients))
+    for light in grid_list:
+        print(light)
 
     # send the newly connected client the current color statuses
     for node in grid_list:
