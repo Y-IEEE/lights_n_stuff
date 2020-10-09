@@ -41,7 +41,7 @@ def set_up_grid(width, height):
     for grid in grid_list:
         print(grid)
 
-def update_light(light_id, val):
+def update_clients(light_id, val):
     message = {"id": light_id, "color": val}
     emit("server_update_light", message, json=True, broadcast=True)
 
@@ -73,6 +73,7 @@ def change_lights_message(message):
 
     # update internal light array, id = index which is really bad rn, find a better way of doing this
     grid_list[int(message['id'])].set_color(message['color'])
+    update_clients(message['id'], message['color'])
 
     
 
@@ -92,7 +93,7 @@ def on_connect():
 
     # send the newly connected client the current color statuses
     for node in grid_list:
-        update_light(node.get_id(), node.get_color())
+        update_clients(node.get_id(), node.get_color())
 
 @socketio.on("disconnect")
 def on_disconnect():
