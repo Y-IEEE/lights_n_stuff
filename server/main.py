@@ -38,6 +38,8 @@ num_clients = 0
 def set_up_grid(width, height):
     global grid_list
     grid_list = [LightNode(i) for i in range(width*height)]
+    for grid in grid_list:
+        print(grid)
 
 def update_light(light_id, val):
     message = {"id": light_id, "color": val}
