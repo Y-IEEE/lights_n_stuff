@@ -13,6 +13,8 @@ var red = "#D8554B";
 var green = "#64B743"
 var blue = "#4BAED8";
 
+var currentColor = "#ffffff";
+
 // // COLOR WHEEL STUFF
 var colorWheel = new iro.ColorPicker("#colorWheel", {
 
@@ -82,9 +84,9 @@ function clicked(id) {
     if(connected == true) {
         console.log("Button Clicked");
 
-        console.log("Color: " + colorWheel.color.hexSstring);
-        document.getElementById("button-"+ parseInt(id)).style.background = colorWheel.color.hexSstring;
-        socket.emit("client_update_light", {"id": id, "color": colorWheel.color.hexSstring});
+        console.log("Color: " + colorWheel.color.hexString);
+        document.getElementById("button-"+ parseInt(id)).style.background = colorWheel.color.hexString;
+        socket.emit("client_update_light", {"id": id, "color": colorWheel.color.hexString});
         
     } else {
         location.reload();
@@ -100,9 +102,9 @@ window.onload = function() {
             if (connected == true) {
                 console.log("Button Clicked");
         
-                console.log("Color: " + colorWheel.color.hexSstring);
-                document.getElementById("button-"+ parseInt(id)).style.background = colorWheel.color.hexSstring;
-                socket.emit("client_update_light", {"id": id, "color": colorWheel.color.hexSstring});
+                console.log("Color: " + colorWheel.color.hexString);
+                document.getElementById("button-"+ parseInt(id)).style.background = colorWheel.color.hexString;
+                socket.emit("client_update_light", {"id": id, "color": colorWheel.color.hexString});
                 
             } else {
                 location.reload();
@@ -121,6 +123,10 @@ socket.on("server_update_light", function(data) {
 
     document.getElementById("button-"+ parseInt(id)).style.background = color;
 })
+
+// colorWheel.on("color:change", function(color) {
+//     currentColor = color.hex
+// });
 
 
 
