@@ -49,14 +49,11 @@ def update_clients(light_id, val):
 def handle_connect(client, userdata, flags, rc):
     # mqtt.subscribe('To Photon')
     print("[CONNECTION]: MQTT Connected!")
+    mqtt.subscribe("001")
 
-# @mqtt.on_message()
-# def handle_mqtt_message(client, userdata, message):
-#     data = dict(
-#         topic=message.topic,
-#         payload=message.payload.decode()
-#     )
-#     print(data)
+@mqtt.on_message()
+def handle_mqtt_message(client, userdata, message):
+    update_clients(1, message.payload.decode())
 
 def change_colors(chip_id, color):
     mqtt.publish(str(chip_id), color)
