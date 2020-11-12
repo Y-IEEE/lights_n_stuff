@@ -1,8 +1,12 @@
 from flask import Flask, render_template
 from flask_mqtt import Mqtt
 from flask_socketio import SocketIO, emit
+from dotenv import load_dotenv
 import time
 import os
+
+# get env variables
+load_dotenv()
 
 app = Flask(__name__)
 app.config['MQTT_BROKER_URL'] = os.getenv("MQTT_BROKER_URL")  
@@ -13,7 +17,7 @@ app.config['MQTT_KEEPALIVE'] = 10  # set the time interval for sending a ping to
 app.config['MQTT_TLS_ENABLED'] = False  # set TLS to disabled for testing purposes
 
 mqtt = Mqtt(app)
-socketio = SocketIO(app)
+socketio = SocketIO(app, logging = False) 
 
 class LightNode:
     def __init__(self, id):
@@ -49,14 +53,11 @@ def update_clients(light_id, val):
 def handle_connect(client, userdata, flags, rc):
     # mqtt.subscribe('To Photon')
     print("[CONNECTION]: MQTT Connected!")
+    mqtt.subscribe('001')
 
-# @mqtt.on_message()
-# def handle_mqtt_message(client, userdata, message):
-#     data = dict(
-#         topic=message.topic,
-#         payload=message.payload.decode()
-#     )
-#     print(data)
+@mqtt.on_message()
+def handle_mqtt_message(client, userdata, message):
+    update_clients(1, message.payload.decode())
 
 def change_colors(chip_id, color):
     mqtt.publish(str(chip_id), color)
