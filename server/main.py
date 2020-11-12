@@ -15,6 +15,9 @@ app.config['MQTT_TLS_ENABLED'] = False  # set TLS to disabled for testing purpos
 mqtt = Mqtt(app)
 socketio = SocketIO(app)
 
+WIDTH = 3
+HEIGHT = 3
+
 class LightNode:
     def __init__(self, id):
         self._id = id
@@ -46,16 +49,21 @@ def update_clients(light_id, val):
     message = {"id": light_id, "color": val}
     socketio.emit("server_update_light", message, json=True) # broadcast=true not needed for socketio.emit
 
+def create_subscribers(width, height):
+    for i in range(width*height):
+        topic = "{:03d}".format(i)
+        mqtt.subscribe(topic)
+
 @mqtt.on_connect()
 def handle_connect(client, userdata, flags, rc):
     # mqtt.subscribe('To Photon')
     print("[CONNECTION]: MQTT Connected!")
-    mqtt.subscribe("001")
+    create_subscribers(WIDTH, HEIGHT)
 
 @mqtt.on_message()
 def handle_mqtt_message(client, userdata, message):
-    print("Received message!" + message.payload.decode())
-    update_clients("1", message.payload.decode())
+    print("Received message! [{}]: {}".format(message.topic, message.payload.decode()))
+    update_clients(message.topic, message.payload.decode())
 
 def change_colors(chip_id, color):
     mqtt.publish(str(chip_id), color)
@@ -72,9 +80,7 @@ def change_lights_message(message):
 
     # update internal light array, id = index which is really bad rn, find a better way of doing this
     grid_list[int(message['id'])].set_color(message['color'])
-    update_clients(message['id'], message['color'])
-
-    
+    update_clients(message['id'], message['color'])   
 
 # debug channel
 @socketio.on("info")
@@ -106,5 +112,6 @@ def base():
 
 
 if __name__ == '__main__':
-    set_up_grid(3, 3)
+    set_up_grid(WIDTH, HEIGHT)
+    # create_subscribers(WIDTH, HEIGHT)
     socketio.run(app, host='0.0.0.0')
