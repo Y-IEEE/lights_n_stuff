@@ -44,7 +44,7 @@ def set_up_grid(width, height):
 def update_clients(light_id, val):
     print("Updating clients...: ({}, {})".format(light_id, val))
     message = {"id": light_id, "color": val}
-    emit("server_update_light", message, json=True, broadcast=True)
+    socketio.emit("server_update_light", message, json=True) # broadcast=true not needed for socketio.emit
 
 @mqtt.on_connect()
 def handle_connect(client, userdata, flags, rc):
