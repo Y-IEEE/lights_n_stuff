@@ -54,7 +54,7 @@ def handle_connect(client, userdata, flags, rc):
 
 @mqtt.on_message()
 def handle_mqtt_message(client, userdata, message):
-    print("Received message!")
+    print("Received message!" + message.payload.decode())
     update_clients(1, message.payload.decode())
 
 def change_colors(chip_id, color):
