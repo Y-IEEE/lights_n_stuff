@@ -42,7 +42,7 @@ def set_up_grid(width, height):
         print(grid)
 
 def update_clients(light_id, val):
-    print("Updating clients...")
+    print("Updating clients...: ({}, {})".format(light_id, val))
     message = {"id": light_id, "color": val}
     emit("server_update_light", message, json=True, broadcast=True)
 
