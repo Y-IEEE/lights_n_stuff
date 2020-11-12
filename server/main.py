@@ -42,6 +42,7 @@ def set_up_grid(width, height):
         print(grid)
 
 def update_clients(light_id, val):
+    print("Updating clients...")
     message = {"id": light_id, "color": val}
     emit("server_update_light", message, json=True, broadcast=True)
 
@@ -53,6 +54,7 @@ def handle_connect(client, userdata, flags, rc):
 
 @mqtt.on_message()
 def handle_mqtt_message(client, userdata, message):
+    print("Received message!")
     update_clients(1, message.payload.decode())
 
 def change_colors(chip_id, color):
