@@ -20,6 +20,8 @@ def create_app(debug=False):
     app.config['MQTT_TLS_ENABLED'] = False  # set TLS to disabled for testing purposes
     app.debug = debug
 
+    app.logger.debug("app config set")
+
     # init mqtt and socketio
     mqtt.init_app(app)
     socketio.init_app(app)
