@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for
 from flask import current_app as app
 
-bp = Blueprint("main", __name__)
+main_bp = Blueprint("main", __name__)
 
 class LightNode:
     def __init__(self, id):
@@ -34,3 +34,4 @@ def base():
 @app.route('/grid')
 def grid_page():
     return render_template('index.html')
+

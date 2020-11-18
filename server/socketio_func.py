@@ -2,14 +2,10 @@ from flask import Blueprint
 from flask import current_app as app
 from server import socketio
 from server.util import change_colors
+from server.util import update_clients
 
-bp = Blueprint('socketio', __name__)
+socketio_bp = Blueprint('socketio', __name__)
 
-
-def update_clients(light_id, val):
-    app.logger.debug("Updating clients...: ({}, {})".format(light_id, val))
-    message = {"id": light_id, "color": val}
-    socketio.emit("server_update_light", message, json=True) # broadcast=true not needed for socketio.emit
 
 # receive light change command from client
 @socketio.on("client_update_light")
@@ -26,7 +22,7 @@ def change_lights_message(message):
 # debug channel
 @socketio.on("info")
 def print_debug(message):
-    print("Client Debug: " + str(message))
+    app.logger.debug("Client Debug: " + str(message))
 
 # when client connects to site
 @socketio.on("connect")
@@ -42,3 +38,4 @@ def on_connect():
 @socketio.on("disconnect")
 def on_disconnect():
     app.logger.debug("Client disconnected!")
+    # TODO use redis to track clients?

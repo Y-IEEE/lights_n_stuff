@@ -4,4 +4,4 @@ import os
 app = create_app(debug=True)
 
 if __name__ == '__main__':
-    socketio.run(app, port=os.environ['PORT'], host='0.0.0.0')
+    socketio.run(app, port=os.getenv("PORT"), host='0.0.0.0', use_reloader=False) # reloader may glitch out mqtt connections?
