@@ -27,6 +27,9 @@ def create_app():
     
     app.debug = os.getenv("DEBUG")
 
+    # have to set this manually because it wont work through app.config for some reason
+    mqtt.client_id = os.getenv("MQTT_CLIENT_ID")
+
     app.logger.info("app config set")
 
     # register blueprints
@@ -48,7 +51,7 @@ def create_app():
     app.logger.info("done initializing!")
     mqtt.init_app(app)  
 
-    # init board  + connections
+    # init beginning board + connections num
     redisc.set('clients', 0)
     for i in range(GRID_HEIGHT * GRID_WIDTH):
         redisc.set(i, "#ffffff")
