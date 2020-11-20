@@ -54,6 +54,7 @@ print("fps:", fps)
 
 while True:
     blankLine = file.readline()
+    i = 0
     for y in range (0, ySize):
         wholeLine = file.readline()
         if wholeLine == '':
@@ -63,9 +64,11 @@ while True:
             wholeLine = file.readline()
         lineWords = wholeLine.split()
         for x in range(0, xSize):
-            pixel = str(x).rjust(2, '0') + "x" + str(y).rjust(2, '0')
+            # pixel = str(x).rjust(2, '0') + "x" + str(y).rjust(2, '0')
+            pixel = "{:03d}".format(i)
             print("id:", pixel, "command:", lineWords[x])
-            mqttc.publish(pixel, lineWords[x])
+            mqttc.publish(pixel, "#" + lineWords[x])
+            i += 1
 
     time.sleep(1/fps)
 

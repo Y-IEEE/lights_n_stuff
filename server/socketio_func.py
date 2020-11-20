@@ -1,41 +1,44 @@
 from flask import Blueprint
-from flask import current_app as app
-from server import socketio
-from server.util import change_colors
-from server.util import update_clients
+from flask_socketio import emit as single_emit
+from server import socketio, redisc, GRID_HEIGHT, GRID_WIDTH
+from server.util import change_colors, update_clients
+import logging
+
+log = logging.getLogger('server.socketio')
 
 socketio_bp = Blueprint('socketio', __name__)
-
 
 # receive light change command from client
 @socketio.on("client_update_light")
 def change_lights_message(message):
-    app.logger.debug("Change Lights: " + str(message))
+    log.info("Change Lights: " + str(message))
 
     # change colors on MQTT
-    change_colors(message["id"], message["color"])
+    topic = "{:03d}".format(int(message['id']))
+    # change_colors(topic, message["color"])
 
-    # update internal light array, id = index which is really bad rn, find a better way of doing this
-    # grid_list[int(message['id'])].set_color(message['color'])
     update_clients(message['id'], message['color'])   
 
 # debug channel
 @socketio.on("info")
 def print_debug(message):
-    app.logger.debug("Client Debug: " + str(message))
+    log.debug("Client Debug: " + str(message))
 
 # when client connects to site
 @socketio.on("connect")
 def on_connect():
-    app.logger.debug("Socket connected!")
+    redisc.incr('clients')
+    log.info("Socket connected! Currently connected clients: {}".format(redisc.get('clients')))
     # for light in grid_list:
     #     print(light)
 
-    # # send the newly connected client the current color statuses
-    # for node in grid_list:
-    #     update_clients(node.get_id(), node.get_color())
+    # send the newly connected client the current color statuses
+    for i in range(GRID_WIDTH*GRID_HEIGHT):
+        message = {"id": i, "color": redisc.get(i)}
+        single_emit("server_update_light", message)
+        
 
 @socketio.on("disconnect")
 def on_disconnect():
-    app.logger.debug("Client disconnected!")
-    # TODO use redis to track clients?
+    redisc.decr('clients')
+    log.info("Client disconnected! Currently connected clients: {}".format(redisc.get('clients')))

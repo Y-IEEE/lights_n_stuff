@@ -3,6 +3,7 @@ import json
 from flask import Flask, render_template, redirect, url_for
 from flask_mqtt import Mqtt
 from flask_socketio import SocketIO
+from flask_socketio import emit as single_emit
 from flask_redis import FlaskRedis
 import os
 # from flask_bootstrap import Bootstrap
@@ -16,21 +17,24 @@ eventlet.monkey_patch()
 app = Flask(__name__)
 app.config['MQTT_BROKER_URL'] = os.getenv("MQTT_BROKER_URL")  
 app.config['MQTT_BROKER_PORT'] = int(os.getenv("MQTT_PORT"))
+app.config['MQTT_CLIENT_ID'] = os.getenv("MQTT_CLIENT_ID")
 app.config['MQTT_USERNAME'] = os.getenv("MQTT_USER")  
 app.config['MQTT_PASSWORD'] = os.getenv("MQTT_PASSWD")   
 app.config['MQTT_KEEPALIVE'] = 30  # set the time interval for sending a ping to the broker to 30 seconds
 app.config['MQTT_TLS_ENABLED'] = False  # set TLS to disabled for testing purposes
-app.config['MQTT_CLIENT_ID'] = os.getenv("MQTT_CLIENT_ID")
 
 app.config['REDIS_URL'] = os.getenv("REDIS_URL")
-app.debug = os.getenv("DEBUG")
 
-mqtt = Mqtt(app)
-socketio = SocketIO(app)
+socketio = SocketIO(app, async_mode='eventlet')
 redisc = FlaskRedis(app, charset="utf-8", decode_responses=True)
 
 # initalize some starting stuff
 redisc.set('clients', 0)
+for i in range(GRID_HEIGHT * GRID_WIDTH):
+    redisc.set(i, "#ffffff")
+
+
+mqtt = Mqtt(app, connect_async=True)
 
 '''             
 *********************
@@ -60,6 +64,7 @@ def change_colors(chip_id, color):
 def update_clients(light_id, val):
     app.logger.debug("Updating clients...: ({}, {})".format(light_id, val))
     message = {"id": light_id, "color": val}
+    redisc.set(int(light_id), val)
     socketio.emit("server_update_light", message, json=True) # broadcast=true not needed for socketio.emit
 
 
@@ -78,8 +83,6 @@ def change_lights_message(message):
     # change colors on MQTT
     change_colors(message["id"], message["color"])
 
-    # update internal light array, id = index which is really bad rn, find a better way of doing this
-    # grid_list[int(message['id'])].set_color(message['color'])
     update_clients(message['id'], message['color'])   
 
 # debug channel
@@ -95,9 +98,11 @@ def on_connect():
     # for light in grid_list:
     #     print(light)
 
-    # # send the newly connected client the current color statuses
-    # for node in grid_list:
-    #     update_clients(node.get_id(), node.get_color())
+    # send the newly connected client the current color statuses
+    for i in range(GRID_WIDTH*GRID_HEIGHT):
+        message = {"id": i, "color": redisc.get(i)}
+        single_emit("server_update_light", message)
+        
 
 @socketio.on("disconnect")
 def on_disconnect():
@@ -128,4 +133,4 @@ def handle_mqtt_message(client, userdata, message):
     update_clients(message.topic, message.payload.decode())
 
 if __name__ == '__main__':
-    socketio.run(app, port=os.getenv("PORT"), host='0.0.0.0', use_reloader=False)
+    socketio.run(app, port=os.getenv("PORT"), host='0.0.0.0', use_reloader=False, debug=os.getenv("DEBUG"))
