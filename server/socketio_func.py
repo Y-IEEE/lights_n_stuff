@@ -1,7 +1,7 @@
 from flask import Blueprint
 from flask_socketio import emit as single_emit
 from server import socketio, redisc
-from server.util import change_colors, update_clients, reset_grid
+from server.util import change_colors, update_clients, reset_grid, get_topic_from_index
 import logging
 
 log = logging.getLogger('server.socketio')
@@ -13,8 +13,11 @@ socketio_bp = Blueprint('socketio', __name__)
 def change_lights_message(message):
     log.info("Change Lights: " + str(message))
 
-    # change colors on MQTT
-    topic = "{:03d}".format(int(message['id']))
+    # TODO will enable this when relevant
+    # change colors on MQTT 
+    # width = int(message['width'])
+    # height = int(message['height'])
+    # topic = get_topic_from_index(message['id'])
     # change_colors(topic, message["color"])
 
     update_clients(message['id'], message['color'])  
@@ -54,7 +57,8 @@ def on_connect():
     
     # send the newly connected client the current color statuses
     for i in range(width*height):
-        message = {"id": i, "color": redisc.get(i)}
+        light_id = get_topic_from_index(i, width, height)
+        message = {"id": light_id, "color": redisc.get(light_id)}
         single_emit("server_update_light", message)
         
 
