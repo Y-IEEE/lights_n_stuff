@@ -87,6 +87,7 @@ socket.on("create_grid", function(data) {
 
     var gridBody = $('#light_grid')
 
+
     // clear the grid of any previous entities
     gridBody.empty()
 
@@ -116,5 +117,7 @@ socket.on("create_grid", function(data) {
         }
         gridBody.append('<br>')
     }
+
+    $('#grid_title').text(width + "x" + height + " Light Grid")
 
 })
