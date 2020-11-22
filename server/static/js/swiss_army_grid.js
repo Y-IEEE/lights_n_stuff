@@ -72,38 +72,69 @@ socket.on("create_grid", function(data) {
 
     console.log(`Constructing grid of dim [${width}, ${height}]`)
 
+    var gridBody = $('#light_grid')
 
-    $(document).ready(function() {
-        var gridBody = $('#light_grid')
+    // clear the grid of any previous entities
+    gridBody.empty()
 
-        // clear the grid of any previous entities
-        gridBody.empty()
+    for (i = 0; i < height; i++) {
+        for (j = 0; j < width; j++) {
+            // add the tile
+            var buttonNum = (i * width) + j
+            var buttonToAdd = `<button id="button-${buttonNum}">${buttonNum}</button>`
+            var buttonDom = $(buttonToAdd).appendTo(gridBody)
 
-        for (i = 0; i < height; i++) {
-            for (j = 0; j < width; j++) {
-                // add the tile
-                var buttonNum = (i * width) + j
-                var buttonToAdd = `<button id="button-${buttonNum}">${buttonNum}</button>`
-                var buttonDom = $(buttonToAdd).appendTo(gridBody)
+            buttonDom.on('click', function(buttonDomWrap, buttonNumWrap) {
+                return function() {
+                    if (connected == true) {
+                        console.log("Button Clicked");
 
-                buttonDom.on('click', function(buttonDomWrap, buttonNumWrap) {
-                    return function() {
-                        if (connected == true) {
-                            console.log("Button Clicked");
+                        console.log("Color: " + colorWheel.color.hexString);
+                        buttonDomWrap.css('background', colorWheel.color.hexString);
+                        socket.emit("client_update_light", { "id": buttonNumWrap, "color": colorWheel.color.hexString }); // should ID be the same as mqtt topic for consistency?
 
-                            console.log("Color: " + colorWheel.color.hexString);
-                            buttonDomWrap.css('background', colorWheel.color.hexString);
-                            socket.emit("client_update_light", { "id": buttonNumWrap, "color": colorWheel.color.hexString }); // should ID be the same as mqtt topic for consistency?
-
-                        } else {
-                            location.reload();
-                        }
+                    } else {
+                        location.reload();
                     }
-                }(buttonDom, buttonNum))
+                }
+            }(buttonDom, buttonNum))
 
-            }
-            gridBody.append('<br>')
         }
-    })
+        gridBody.append('<br>')
+    }
+
+
+    // $(document).ready(function() {
+    //     var gridBody = $('#light_grid')
+
+    //     // clear the grid of any previous entities
+    //     gridBody.empty()
+
+    //     for (i = 0; i < height; i++) {
+    //         for (j = 0; j < width; j++) {
+    //             // add the tile
+    //             var buttonNum = (i * width) + j
+    //             var buttonToAdd = `<button id="button-${buttonNum}">${buttonNum}</button>`
+    //             var buttonDom = $(buttonToAdd).appendTo(gridBody)
+
+    //             buttonDom.on('click', function(buttonDomWrap, buttonNumWrap) {
+    //                 return function() {
+    //                     if (connected == true) {
+    //                         console.log("Button Clicked");
+
+    //                         console.log("Color: " + colorWheel.color.hexString);
+    //                         buttonDomWrap.css('background', colorWheel.color.hexString);
+    //                         socket.emit("client_update_light", { "id": buttonNumWrap, "color": colorWheel.color.hexString }); // should ID be the same as mqtt topic for consistency?
+
+    //                     } else {
+    //                         location.reload();
+    //                     }
+    //                 }
+    //             }(buttonDom, buttonNum))
+
+    //         }
+    //         gridBody.append('<br>')
+    //     }
+    // })
 
 })
