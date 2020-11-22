@@ -1,22 +1,20 @@
 from flask import Blueprint
-from server import GRID_HEIGHT, GRID_WIDTH, mqtt
-from server.util import update_clients
+from server import mqtt, redisc
+from server.util import update_clients, create_subscribers
 import logging
 
 log = logging.getLogger('server.mqtt')
 
 mqtt_bp = Blueprint('mqtt', __name__)
 
-def create_subscribers(width, height):
-    for i in range(width*height):
-        topic = "{:03d}".format(i)
-        log.info("Subscribing to Topic: {}".format(topic))
-        mqtt.subscribe(topic)
 
 @mqtt.on_connect()
 def mqtt_connect_cb(client, userdata, flags, rc):
     log.info("MQTT Connected!")
-    create_subscribers(GRID_WIDTH, GRID_HEIGHT)
+    width = int(redisc.get('grid_width'))
+    height = int(redisc.get('grid_height'))
+    
+    create_subscribers(width, height)
 
 @mqtt.on_message()
 def handle_mqtt_message(client, userdata, message):

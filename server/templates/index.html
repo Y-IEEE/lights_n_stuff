@@ -8,41 +8,31 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js" type="text/javascript"></script>
-
     <link rel="stylesheet" href="{{url_for('static', filename='css/styles.css')}}">
 
     <script src="https://cdn.jsdelivr.net/npm/@jaames/iro" type="text/javascript"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous" type="text/javascript"></script>
-    <!-- <script src="{{url_for('static', filename='js/socket.io.js')}}"></script> -->
-    <script src="{{url_for('static', filename='js/mqtt_topic_as_id.js')}}"></script>
-    <!-- <script type="text/javascript" charset="utf-8">
-			var socket = io();
-			socket.on('connect', function() {
-				socket.emit("topic", {data: 'I\'m connected!'});
-			});
-		</script> -->
-
+    <script src="{{url_for('static', filename='js/swiss_army_grid.js')}}"></script>
 
     <body>
-        <div class="card bg-light mb-3" style="max-width: 38em; margin: auto; margin-top: 2em;">
+        <div class="card bg-light mb-3" style="max-width: 76em; margin: auto; margin-top: 2em;">
+
+            <div class="form-group">
+                <input type="number" class="form-control" id="dim_width" placeholder="width">
+                <input type="number" class="form-control" id="dim_height" placeholder="height">
+            </div>
+
+            <button type="submit" class="btn btn-primary" id="dim_submit" onclick="dim_submit_func()">Submit</button>
+
+        </div>
+
+        <div class="card bg-light mb-3" style="max-width: 76em; margin: auto; margin-top: 2em;">
             <div class="card-header h1">3x3 Light Grid</div>
-            <div class="card-body" style="text-align: center;">
-                <button id="button-0">0</button>
-                <button id="button-1">1</button>
-                <button id="button-2">2</button>
-                <br>
-                <button id="button-3">3</button>
-                <button id="button-4">4</button>
-                <button id="button-5">5</button>
-                <br>
-                <button id="button-6">6</button>
-                <button id="button-7">7</button>
-                <button id="button-8">8</button>
-                <br>
+            <div class="card-body" style="text-align: center;" id="light_grid">
+                <!-- buttons go here -->
             </div>
         </div>
-        <div class="card bg-light mb-3" style="max-width: 38em; margin: auto; margin-top: 2em;">
+        <div class="card bg-light mb-3" style="max-width: 76em; margin: auto; margin-top: 2em;">
             <div class="card-header"><b>Color Picker</b></div>
             <div class="card-body">
                 <!-- <div id="messages">

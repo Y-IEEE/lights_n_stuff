@@ -1,3 +1,14 @@
+'''
+
+OUTDATED OUTDATED OUTDATED OUTDATED OUTDATED
+-------------------------------------------------
+only keeping this for archival purposes for now
+will delete this file later
+-------------------------------------------------
+OUTDATED OUTDATED OUTDATED OUTDATED OUTDATED 
+
+'''
+
 import eventlet
 import json
 from flask import Flask, render_template, redirect, url_for

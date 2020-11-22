@@ -8,11 +8,8 @@ import os, sys, eventlet, logging
 eventlet.monkey_patch()
 
 mqtt = Mqtt(connect_async=True, mqtt_logging=True)
-socketio = SocketIO(async_mode='eventlet')
+socketio = SocketIO()
 redisc = FlaskRedis(charset="utf-8", decode_responses=True)
-
-GRID_HEIGHT = 3
-GRID_WIDTH = 3
 
 def create_app():
     app = Flask(__name__)
@@ -46,14 +43,15 @@ def create_app():
 
     # init mqtt and socketio
     app.logger.info("initializing libraries...")
-    socketio.init_app(app)
     redisc.init_app(app)
+    socketio.init_app(app, async_mode='eventlet')
     app.logger.info("done initializing!")
     mqtt.init_app(app)  
 
     # init beginning board + connections num
     redisc.set('clients', 0)
-    for i in range(GRID_HEIGHT * GRID_WIDTH):
-        redisc.set(i, "#ffffff")
+    if int(redisc.exists('grid_width')) < 1 or int(redisc.exists('grid_height')) < 1:
+        redisc.set('grid_width', 3)
+        redisc.set('grid_height', 3)
 
     return app
