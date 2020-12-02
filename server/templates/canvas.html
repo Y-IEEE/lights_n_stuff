@@ -2,17 +2,16 @@
 <html>
 
 <head>
-    <title>Test Light Grid</title>
+    <title>Animation Canvas</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
-    <link rel="stylesheet" href="{{url_for('static', filename='css/styles.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/animation_canvas.css')}}">
 
     <script src="https://cdn.jsdelivr.net/npm/@jaames/iro" type="text/javascript"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous" type="text/javascript"></script>
-    <script src="{{url_for('static', filename='js/swiss_army_grid.js')}}"></script>
+    <script src="{{url_for('static', filename='js/animation_canvas.js')}}"></script>
 
     <body>
         <div class="card bg-light mb-3" style="max-width: 76em; margin: auto; margin-top: 2em;">
@@ -22,8 +21,14 @@
                 <input type="number" class="form-control" id="dim_height" placeholder="height">
             </div>
 
-            <button type="submit" class="btn btn-primary" id="dim_submit" onclick="dim_submit_func()">Submit</button>
+            <button type="submit" class="btn btn-primary" id="dim_submit" onclick="initGrid($('#dim_width').val(), $('#dim_height').val())">Submit</button>
 
+        </div>
+
+        <div class="card bg-light mb-3" style="max-width: 76em; margin: auto; margin-top: 2em;">
+            <p id="frame_id" style="text-align: center;">Current Frame: 1</p>
+            <button type="button" class="btn btn-danger" id="previous_frame" onclick="prevFrame()">Previous Frame</button>
+            <button type="button" class="btn btn-success" id="next_frame" onclick="nextFrame()">Next Frame</button>
         </div>
 
         <div class="card bg-light mb-3" style="max-width: 76em; margin: auto; margin-top: 2em;">
@@ -32,12 +37,26 @@
                 <!-- buttons go here -->
             </div>
         </div>
+
         <div class="card bg-light mb-3" style="max-width: 76em; margin: auto; margin-top: 2em;">
             <div class="card-header"><b>Color Picker</b></div>
-            <div class="card-body">
+            <div class="card-body" style="text-align: center;">
                 <!-- <div id="messages">
 				</div>	 -->
-                <div class="wheel" id="colorWheel"></div>
+                <div class="wheel" id="colorWheel">
+                    <button type="button" class="btn btn-danger" id="off_button" data-toggle="button" onclick="toggleOffSwitch()">Toggle Light Off</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card bg-light mb-3" style="max-width: 76em; margin: auto; margin-top: 2em;">
+            <div class="card-header"><b>Export</b></div>
+            <div class="card-body" style="text-align: center;" id="canvas_output">
+                <button type="button" class="btn btn-warning" onclick="exportGrid()">Export Animation</button>
+                <br>
+                <div class="alert alert-success" role="alert" id="animation_output">
+                    Animation output will go here!
+                </div>
             </div>
         </div>
     </body>

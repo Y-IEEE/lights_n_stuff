@@ -42,37 +42,59 @@ mqttc.connect("35.239.98.209", 14479)
 
 fileName = input("Enter text file name: ")
 file = open(fileName, "r")
-size = file.readline()
-xSize = int(size[0:2])
-ySize = int(size[3:5])
+size = [int(x) for x in file.readline().split('x')]
+xSize = size[0]
+ySize = size[1]
 print("x:", xSize, "y:", ySize)
-
-mqttc.publish("size", size[0:5])
 
 fps = int(file.readline())
 print("fps:", fps)
 
+isEOF = True
+
 while True:
-    blankLine = file.readline()
-    i = 0
+    start_pos = file.tell()
+    line = file.readline()
+    # print('starting with: ', line)
+
+    # skip all the beginning stuff
+    while (isEOF and '---' not in line):
+        # print('skipping: ', line)
+        start_pos = file.tell()
+        line = file.readline()
+    isEOF = False
+
+    # find the next frame
+    while (line == '\n' or '---' in line):
+        start_pos = file.tell()
+        line = file.readline()
+
+    # check if EOF
+    if line == '':
+        print("EOF")
+        file.seek(0, os.SEEK_SET)
+        isEOF = True
+        continue
+
+    # if it has reached here, we are now reading a valid frame
+
+    # unread the first line of frame
+    file.seek(start_pos, os.SEEK_SET)
+
     for y in range (0, ySize):
         wholeLine = file.readline()
-        if wholeLine == '':
-            print("EOF")
-            mqttc.publish("size", size[0:5])
-            file.seek(13, os.SEEK_SET) # 12 for single digit fps
-            wholeLine = file.readline()
+        print(wholeLine)
+
         lineWords = wholeLine.split()
         for x in range(0, xSize):
             pixel = str(x).rjust(2, '0') + "x" + str(y).rjust(2, '0')
+            # print("line: ", lineWords)
             # pixel = "{:03d}".format(i)
             print("id:", pixel, "command:", lineWords[x])
-            mqttc.publish(pixel, "#" + lineWords[x])
-            i += 1
+            
+            optionalTag = '#' if lineWords[x][0] != '#' else ''
+            mqttc.publish(pixel, optionalTag + lineWords[x])
 
     time.sleep(1/fps)
-
-
-
 
 file.close()

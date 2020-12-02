@@ -6,6 +6,8 @@ var height;
 var connected = false;
 const socket = io();
 
+var offToggle = false
+
 // // COLOR WHEEL STUFF
 var colorWheel = new iro.ColorPicker("#colorWheel", {
 
@@ -56,13 +58,14 @@ function dim_submit_func() {
 
 }
 
+function toggle_off_switch() {
+    offToggle = !offToggle
+}
 
 
 socket.on('connect', function() {
     console.log("Socket client connected!")
-    connected = true;
-
-
+    connected = true
 });
 
 // update grid from server messages
@@ -73,7 +76,12 @@ socket.on("server_update_light", function(data) {
     console.log("Light callback received!");
     console.log(data);
 
-    document.getElementById("button-" + id).style.background = color;
+
+    if (color == 'OFF') {
+        $('#button-' + id).css('background', 'rgb(239, 239, 239)')
+    } else {
+        $('#button-' + id).css('background', color)
+    }
 })
 
 // construct the grid
@@ -96,7 +104,7 @@ socket.on("create_grid", function(data) {
             // add the tile
             var buttonNum = (i * width) + j
             var buttonID = String(j).padStart(2, 0) + "x" + String(i).padStart(2, 0)
-            var buttonToAdd = `<button id="button-${buttonID}">${buttonNum}</button>`
+            var buttonToAdd = `<button class="grid_button" id="button-${buttonID}">${buttonNum}</button>`
             var buttonDom = $(buttonToAdd).appendTo(gridBody)
 
             buttonDom.on('click', function(buttonDomWrap, buttonIDWrap) {
@@ -104,9 +112,14 @@ socket.on("create_grid", function(data) {
                     if (connected == true) {
                         console.log("Button Clicked");
 
-                        console.log("Color: " + colorWheel.color.hexString);
-                        buttonDomWrap.css('background', colorWheel.color.hexString);
-                        socket.emit("client_update_light", { "id": buttonIDWrap, "color": colorWheel.color.hexString }); // should ID be the same as mqtt topic for consistency?
+                        if (offToggle) {
+                            buttonDomWrap.css('background', 'rgb(239, 239, 239)')
+                            socket.emit("client_update_light", { 'id': buttonIDWrap, 'color': 'OFF' })
+                        } else {
+                            console.log("Color: " + colorWheel.color.hexString);
+                            buttonDomWrap.css('background', colorWheel.color.hexString);
+                            socket.emit("client_update_light", { "id": buttonIDWrap, "color": colorWheel.color.hexString }); // should ID be the same as mqtt topic for consistency?
+                        }
 
                     } else {
                         location.reload();
