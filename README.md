@@ -3,6 +3,8 @@ Lets putting lights on a building.
 
 <br/>
 
+![Wiring schematic](schematic.png)
+
 ## 3x3 Grid Example:
 A simple implementation of Paho MQTT using cloud MQTT as a broker, more information in folder
 
